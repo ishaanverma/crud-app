@@ -5,4 +5,17 @@ services:
     restart: always
     ports:
       - "27017:27017"
+  server:
+    build: ./server
+    ports:
+      - "4000:4000"
+    environment:
+      - MONGO_URL=mongodb://db:27017/server
+      - PORT=4000
+  client:
+    build: ./client
+    ports:
+      - "3000:3000"
+    environment:
+      - API_URL=http://server:4000
 
