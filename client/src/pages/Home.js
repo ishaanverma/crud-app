@@ -3,6 +3,7 @@ import axios from "axios";
 import { inventoryReducer } from "../reducers/inventoryReducer";
 import { API_URL } from "../constants";
 import CreateItem from "../components/CreateItem";
+import UpdateItem from "../components/UpdateItem";
 
 const Home = () => {
   const [items, dispatchItems] = useReducer(inventoryReducer, {
@@ -32,6 +33,15 @@ const Home = () => {
   const createInventoryItem = async (data) => {
     try {
       await axios.post(`${API_URL}/inventory/create`, data);
+    } catch (err) {
+      console.log("Could not submit data");
+    }
+  };
+
+  const updateInventoryItem = async (data) => {
+    console.log(data);
+    try {
+      await axios.patch(`${API_URL}/inventory/update`, data);
     } catch (err) {
       console.log("Could not submit data");
     }
@@ -74,31 +84,45 @@ const Home = () => {
         {items.isLoading ? (
           <div>Loading ...</div>
         ) : (
-          <ItemList data={items.data.length > 0 ? items.data : []} onDelete={deleteInventoryItem} />
+          <ItemList
+            data={items.data.length > 0 ? items.data : []}
+            onDelete={deleteInventoryItem}
+            onUpdate={updateInventoryItem}
+          />
         )}
       </div>
     </>
   );
 };
 
-const ItemList = ({ data, onDelete }) => {
+const ItemList = ({ data, onDelete, onUpdate }) => {
   return data.length === 0 ? (
     <div>Inventory Empty</div>
   ) : (
-    data.map((item) => (
+    data.map((item, index) => (
       <div className="card p-3 mt-3" key={item.itemId}>
         <h5 className="card-title">{item.name}</h5>
         <p className="card-text">
-          Type: {item.type || 'Other'} Count: {item.count}
+          Type: {item.type || "Other"} Count: {item.count}
         </p>
         <button
           type="button"
           className="btn btn-primary"
           data-bs-toggle="modal"
-          data-bs-target="#staticBackdrop"
+          data-bs-target={`#updateModal${index}`}
         >
           Edit
         </button>
+        <UpdateItem
+          onSubmit={onUpdate}
+          modalId={`updateModal${index}`}
+          data={{
+            itemId: item.itemId,
+            itemName: item.name,
+            itemType: item.type,
+            itemCount: item.count,
+          }}
+        />
         <button
           type="button"
           className="btn btn-danger mt-2"
