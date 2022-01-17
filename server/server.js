@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const { PORT, MONGO_URL } = require('./constants');
 const inventoryPath = require('./routes/inventory');
 
@@ -9,6 +10,7 @@ const app = express();
 // setup middlewares
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(cors());
 app.use('/inventory', inventoryPath);
 
 

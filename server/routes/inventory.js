@@ -43,7 +43,7 @@ router.post("/create", async (req, res) => {
 });
 
 router.delete("/delete", async (req, res) => {
-  const { itemId } = req.body;
+  const { itemId } = req.query;
 
   if (!itemId) {
     return res
