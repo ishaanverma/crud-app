@@ -6,10 +6,15 @@ const downloadResource = require("../utils/downloadResource");
 const router = express.Router();
 
 router.get("/", (req, res) => {
+  // Set response header
+  res.header('Content-Type', 'application/json');
   res.json({ message: "Inventory Endpoint" });
 });
 
 router.post("/create", async (req, res) => {
+  // Set response header
+  res.header('Content-Type', 'application/json');
+
   if (!req.body.name) {
     return res
       .status(400)
@@ -43,6 +48,9 @@ router.post("/create", async (req, res) => {
 });
 
 router.delete("/delete", async (req, res) => {
+  // Set response header
+  res.header('Content-Type', 'application/json');
+
   const { itemId } = req.query;
 
   if (!itemId) {
@@ -72,6 +80,9 @@ router.delete("/delete", async (req, res) => {
 });
 
 router.patch("/update", async (req, res) => {
+  // Set response header
+  res.header('Content-Type', 'application/json');
+
   const { itemId, name, count, type } = req.body;
   const updatedItem = {};
 
@@ -112,6 +123,9 @@ router.patch("/update", async (req, res) => {
 });
 
 router.get("/all", async (req, res) => {
+  // Set response header
+  res.header('Content-Type', 'application/json');
+
   let all;
   try {
     all = await InventoryModel.find({ deleted: false }).limit(20);
