@@ -1,6 +1,7 @@
 const express = require("express");
 const { v4: uuidv4 } = require("uuid");
 const InventoryModel = require("../models/InventoryModel");
+const downloadResource = require("../utils/downloadResource");
 
 const router = express.Router();
 
@@ -120,6 +121,20 @@ router.get("/all", async (req, res) => {
       .send({ status: 500, message: "Error fetching items" });
   }
   return res.status(200).send({ status: 200, message: "sucesss", data: all });
+});
+
+router.get("/download", async (req, res) => {
+  const fields = ["itemId", "name", "type", "count"];
+  let all;
+  try {
+    all = await InventoryModel.find({ deleted: false }).limit(20);
+  } catch (err) {
+    return res
+      .status(500)
+      .send({ status: 500, message: "Error fetching items" });
+  }
+
+  return downloadResource(res, 'items.csv', fields, all);
 });
 
 module.exports = router;
