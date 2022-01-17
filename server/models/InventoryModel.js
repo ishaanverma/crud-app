@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const InventorySchema = mongoose.Schema({
   itemId: {
-    type: Number,
+    type: String,
     required: true,
   },
   name: {
@@ -14,8 +14,13 @@ const InventorySchema = mongoose.Schema({
   },
   count: {
     type: Number,
+    required: true,
   },
   addedOn: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedOn: {
     type: Date,
     default: Date.now,
   },
